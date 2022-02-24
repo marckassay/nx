@@ -9,8 +9,10 @@ export async function applicationGenerator(tree: Tree, options: Schema) {
     throw new Error(missingArgument('name', 'Provide a name for your NativeScript app.', 'nx g @nativescript/nx:app name'));
   }
 
+  options.platform = options.platform === 'none' ? undefined : options.platform;
+
   prerun(tree, options, true);
-  PluginHelpers.applyAppNamingConvention(tree, options, 'nativescript');
+  PluginHelpers.applyAppNamingConvention(tree, options, options.platform);
   addAppFiles(tree, options, options.name);
   // add extra files per options
   if (options.routing && ['angular'].includes(options.framework)) {
@@ -108,7 +110,7 @@ export async function applicationGenerator(tree: Tree, options: Schema) {
 }
 
 function addAppFiles(tree: Tree, options: Schema, appName: string, extra: string = '') {
-  const appname = getAppName(options, 'nativescript');
+  const appname = getAppName(options, options.platform);
   const directory = options.directory ? `${options.directory}/` : '';
   const framework = options.framework || getFrontendFramework() || 'angular';
   if (typeof options.routing === 'undefined') {
@@ -121,7 +123,7 @@ function addAppFiles(tree: Tree, options: Schema, appName: string, extra: string
     appname,
     directoryAppPath: `${directory}${options.name}`,
     pathOffset: directory ? '../../../' : '../../',
-    libFolderName: PluginHelpers.getLibFoldername('nativescript'),
+    libFolderName: PluginHelpers.getLibFoldername('nativescript'), // unsure why this is needed if adding app files.
     angularVersion,
     nsAngularVersion,
     nsCoreVersion,

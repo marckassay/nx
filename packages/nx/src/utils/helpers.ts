@@ -164,16 +164,23 @@ export namespace PluginHelpers {
     return pluginSettings;
   }
 
+  // TODO: this is a duplicate function. see other in general.ts
   /**
-   * Returns a name with the platform.
+   * Returns a sanitized name value with the platform (if platform param is defined).
    *
    * @example (app, nativescript) => nativescript-app or app-nativescript
+   * @example (app, undefined) => app
    * @param name
    * @param platform
    */
-  export function getPlatformName(name: string, platform: PlatformTypes) {
+  export function getPlatformName(name: string, platform?: string) {
     const nameSanitized = toFileName(name);
-    return getGroupByName() ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+
+    if(platform) {
+      return getGroupByName() ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+    } else {
+      return nameSanitized;
+    }
   }
 
   /**
@@ -183,7 +190,7 @@ export namespace PluginHelpers {
    * @param platform
    * @param framework
    */
-  export function getLibFoldername(platform: PlatformTypes, framework?: FrameworkTypes) {
+  export function getLibFoldername(platform?: string, framework?: FrameworkTypes) {
     const frontendFramework = getFrontendFramework();
     // console.log('getLibFoldername frontendFramework:', frontendFramework);
     // console.log('framework:', framework);
@@ -192,9 +199,17 @@ export namespace PluginHelpers {
       // user had a default framework set
       // however an explicit framework is being requested
       // if they differ, use suffix to distinguish
-      frameworkSuffix = `-${framework}`;
+      frameworkSuffix = framework;
     }
-    return `${platform}${frameworkSuffix}`;
+
+    // TODO: unsure if when platform is undefined, will this suffice.
+    if(platform) {
+      return `${platform}-${frameworkSuffix}`;
+    } else if (frameworkSuffix) {
+      return frameworkSuffix;
+    } else {
+      return '';
+    }
   }
 
   export function getExternalChainsForGenerator(options: Schema, generator: string, packagesToRunXplat: Array<string>) {
@@ -350,14 +365,16 @@ export namespace PluginHelpers {
     return externalChains;
   }
 
-  export function applyAppNamingConvention(tree: Tree, options: any, platform: PlatformTypes) {
+  // TODO: this is a duplicate function. see other in general.ts
+  export function applyAppNamingConvention(tree: Tree, options: any, platform?: string) {
     const { name, directory } = getAppNamingConvention(options, platform);
     options.name = name;
     options.directory = directory;
     // console.log('applyAppNamingConvention:', options);
   }
 
-  export function getAppNamingConvention(options: any, platform: PlatformTypes) {
+  // TODO: this is a duplicate function. see other in general.ts
+  export function getAppNamingConvention(options: any, platform?: string) {
     let name = '';
     let directory = '';
     if (options.directory) {

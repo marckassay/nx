@@ -51,28 +51,36 @@ export function getGroupByName() {
   return groupByName;
 }
 
-export function getAppName(options: any, platform: PlatformTypes) {
-  return groupByName
-    ? options.name.replace(`-${platform}`, '')
-    : options.name.replace(`${platform}-`, '');
+export function getAppName(options: any, platform?: string) {
+
+  if(platform) {
+    return groupByName
+      ? options.name.replace(`-${platform}`, '')
+      : options.name.replace(`${platform}-`, '');
+  } else {
+    return options.name;
+  }
 }
+
 
 export function isXplatWorkspace() {
   return usingXplatWorkspace;
 }
 
+// TODO: this is a duplicate function. see other in helpers.ts
 export function applyAppNamingConvention(
   options: any,
-  platform: PlatformTypes
+  platform?: string
 ) {
     const { name, directory } = getAppNamingConvention(options, platform);
     options.name = name;
     options.directory = directory;
 }
 
+// TODO: this is a duplicate function. see other in helpers.ts
 export function getAppNamingConvention(
   options: any,
-  platform: PlatformTypes
+  platform?: string
 ) {
   let name = '';
   let directory = '';
@@ -95,11 +103,23 @@ export function getAppNamingConvention(
   };
 }
 
-export function getPlatformName(name: string, platform: PlatformTypes) {
+// TODO: this is a duplicate function. see other in helpers.ts
+/**
+ * Returns a sanitized name value with the platform (if platform param is defined).
+ *
+ * @example (app, nativescript) => nativescript-app or app-nativescript
+ * @example (app, undefined) => app
+ * @param name
+ * @param platform
+ */
+export function getPlatformName(name: string, platform?: string) {
   const nameSanitized = toFileName(name);
-  return getGroupByName()
-    ? `${nameSanitized}-${platform}`
-    : `${platform}-${nameSanitized}`;
+
+  if(platform) {
+    return getGroupByName() ? `${nameSanitized}-${platform}` : `${platform}-${nameSanitized}`;
+  } else {
+    return nameSanitized;
+  }
 }
 
 export function getDefaultTemplateOptions() {

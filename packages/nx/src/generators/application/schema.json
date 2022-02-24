@@ -32,6 +32,12 @@
         ]
       }
     },
+    "platform": {
+      "description": "An arbitrary value to be assigned to this application's folder name.",
+      "type": "string",
+      "default": "nativescript",
+      "x-prompt": "What platform does this NativeScript app belong to?"
+    },
     "routing": {
       "type": "boolean",
       "description": "Use root routing module.",
