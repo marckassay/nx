@@ -20,6 +20,12 @@
       "x-prompt": "What name would you like to use for the library?",
       "pattern": "^[a-zA-Z]{1}.*$"
     },
+    "platform": {
+      "description": "An arbitrary value to be assigned to this library's folder name.",
+      "type": "string",
+      "default": "nativescript",
+      "x-prompt": "What platform does this NativeScript lib belong to?"
+    },
     "directory": {
       "type": "string",
       "description": "A directory where the lib is placed"

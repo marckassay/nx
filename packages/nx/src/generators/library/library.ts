@@ -4,8 +4,10 @@ import { libraryGenerator } from '@nrwl/workspace';
 
 export function library(tree: Tree, options: any) {
 
+    options.platform = options.platform === 'none' ? undefined : options.platform;
+
     prerun(tree, options, true);
-    PluginHelpers.applyAppNamingConvention(tree, options, 'nativescript'),
+    PluginHelpers.applyAppNamingConvention(tree, options, options.platform),
     libraryGenerator(tree, options)
 
       // add extra files
